@@ -4,7 +4,9 @@ const router = Router();
 
 const { connect} = require('../database')
 
-const bookModel = require("../models/book_model");
+const booKController = require("../controller/bookController.js");
+
+
 
 
 
@@ -29,28 +31,17 @@ router.get('/api/books', (req, res) => {
 
 })
 
-
-router.post('/books/create', async (req, res)=>{
-    const bookData = req.body;
-    const newBook = new booktModel(bookData);
-    await newBook.save(function(err){
-        if(!err){
-
-            res.json({ sucess: false, error:err });
-            return ;
-        }
-        
-        console.log(bookData)
-
-        res.json({ sucess: true, data: newBook });
+//with Sequelize
+router.post('/addBook', booKController.addBook)
+router.get('/allBooks', booKController.getAllBooks)
+router.get(':id', booKController.getOneBook)
+router.put(':id', booKController.updateBook)
 
 
-        
-    })
-})
 
 
 // Add books 
+
 router.post('/api/books/create', (req, res) => {
 
     connect.getConnection((err, connection) => {

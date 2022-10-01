@@ -1,12 +1,16 @@
-// const {Schema, model} = require('mysql');
+module.exports = (sequelize, DataTypes) => {
+    const Book = sequelize.define("book", {
+        title: {
+            type: DataTypes.STRING,
+        },
+        tagline: {
+            type: DataTypes.STRING
+        },
+        description: {
+            type: DataTypes.TEXT
+        }
+    })
 
-// const bookSchema = new Schema({
-//     id :{type:String, required:true, unique:true},
-//     name :{type:String, required:true},
-//     tagline:{ type: String, required: true},
-//     description :{type: String},
-//     addedon : {type: Date, default: Date.now},
-// });
+    return Book
+}
 
-// const bookModel = model('Book', bookSchema);
-// module.exports = bookModel;
