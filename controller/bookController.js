@@ -1,42 +1,67 @@
-const db = require('../models/book_model.js')
 
-sequelize = db.sequelize
-
-const Book = db.books
-
-
+const Book = require('../models/book_model.js')
 
 const addBook = async (req, res) => {
-    let bookData= {
-        tiltle: req.body.tiltle,
-        tagline: req.body.tagline,
-        description: req.body.description
+    const { title, tagline, description, image} = req.body
+    const  newBook=  Book.build({
+        "title": title,
+        "tagline": tagline,
+        "description": description,
+        "image": image
+    })
+    try {
+        await newBook.save()
+        res.status(200).json(newBook)
+    }catch (error){
+        res.json(error)
     }
 
-    const book = await Book.create(bookData)
-    res.status(200).send(book)
 }
 
+
 const getAllBooks = async (req, res) => {
-    let books = await Book.findAll()
-    res.status(200).send(books)
+    const books = await Book.findAll()
+    res.status(200).json(books)
+    
 }
 
 const getOneBook = async (req, res) => {
     let id = req.params.id
-    let books = await Book.findOne({ where: {id: id}})
-    res.status(200).send(books)
+    let book = await Book.findOne({ where: {id: id}})
+    res.status(200).json(book)
 }
 
 const updateBook = async (req, res) => {
     let id = req.params.id
-    const book = await Book.update(req.body, {where: { id: id}})
-    res.status(200).send(book)
+    const book = await Book.findOne({where: { id: id}})
+    const {title, tagline, description, image} = req.body
+
+    await book.set({
+        'title': title,
+        'tagline':tagline,
+        'description':description,
+        'image': image
+    })
+    try {
+        await book.save()
+        res.status(201).send(book)
+
+    }catch(error){
+        res.json(error)
+    }
+   
+}
+
+const delateBook = async (req, res) => {
+    let id = req.params.id
+    const book = await Book.findOne({where: { id: id}})
+
+    await book.destroy()
+
+    res.status(200).json({"message": `book with ${id} has been deleted`})
+
 }
 
 module.exports = {
-    addBook,
-    getAllBooks,
-    getOneBook,
-    updateBook
+    addBook, getAllBooks, getOneBook, updateBook, delateBook
 }

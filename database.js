@@ -1,14 +1,24 @@
-const mysql = require('mysql')
+const { Sequelize } = require('sequelize');
 
 
+const sequelize = new Sequelize(
+   'library_nodejs','root',
+    '',{
+        dialect : "mysql",
+        host : "localhost"
+    }
 
-const connect = mysql.createPool({
-    connectionLimit : 10,
-    host : 'localhost',
-    user : 'root',
-    password : '',
-    database : 'library_nodejs'
-})
+)
 
 
-module.exports = { connect };
+const connect = async ()=>{
+    try {
+        await sequelize.authenticate();
+        console.log("Successfully connected");
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
+module.exports = { sequelize, connect };

@@ -1,16 +1,18 @@
-module.exports = (sequelize, DataTypes) => {
-    const Book = sequelize.define("book", {
+const { Sequelize } = require("sequelize")
+const { sequelize } = require("../database")
+
+    const Book = sequelize.define("Book", {
         title: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
         },
         tagline: {
-            type: DataTypes.STRING
+            type: Sequelize.STRING
         },
         description: {
-            type: DataTypes.TEXT
+            type: Sequelize.TEXT
         }
     })
 
-    return Book
-}
+sequelize.sync()
 
+module.exports = Book
